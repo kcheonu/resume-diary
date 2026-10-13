@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, HttpUrl, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class JobCreate(BaseModel):
@@ -21,3 +21,14 @@ class JobResponse(JobCreate):
 
     class Config:
         from_attributes = True
+
+
+class JobRecommendationRequest(BaseModel):
+    skills: list[str] = Field(min_length=1)
+    limit: int = Field(default=20, ge=1, le=100)
+
+
+class JobRecommendationResponse(BaseModel):
+    job: JobResponse
+    matched_skills: list[str]
+    match_score: int = Field(ge=1, le=100)
